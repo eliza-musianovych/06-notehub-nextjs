@@ -5,19 +5,26 @@ import NoteList from '@/components/NoteList/NoteList'
 import NoteModal from '@/components/NoteModal/NoteModal'
 import Pagination from '@/components/Pagination/Pagination'
 import SearchBox from '@/components/SearchBox/SearchBox'
+import type { Note } from '@/types/note';
 import { useState } from 'react'
 import { useDebounce } from 'use-debounce';
 import { fetchNotes } from '@/lib/api';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
+interface NoteData {
+  notes: Note[],
+  totalPages: number,
+  query?: string,
+  page: number
+}
+
 type NotesClientProps = {
-  initialQuery: string;
-  initialPage: number;
+  initialNotes: NoteData
 };
 
-export default function NotesClient({ initialQuery, initialPage }: NotesClientProps) {
-  const [query, setQuery] = useState(initialQuery);
-  const [page, setPage] = useState(initialPage);
+export default function NotesClient({ initialNotes }: NotesClientProps) {
+  const [query, setQuery] = useState(initialNotes.query ?? '');
+  const [page, setPage] = useState(initialNotes.page ?? 1);
   const [isCreateNote, setIsCreateNote] = useState<boolean>(false);
 
   const updateQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +38,15 @@ export default function NotesClient({ initialQuery, initialPage }: NotesClientPr
     queryKey: ['notes', debouncedQuery, page],
     queryFn: () => fetchNotes(debouncedQuery, page),
     placeholderData: keepPreviousData,
-  })
+    initialData: () => {
+      if (
+      debouncedQuery === (initialNotes.query ?? '') &&
+      page === (initialNotes.page ?? 1)
+      ) {
+        return initialNotes;
+      } return undefined;
+    },
+  });
 
   const handleClick = () => setIsCreateNote(true);
   const handleClose = () => setIsCreateNote(false)

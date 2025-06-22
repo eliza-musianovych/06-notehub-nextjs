@@ -14,9 +14,18 @@ export default async function Notes({ params}: Props) {
         queryKey: ['note', initialQuery, initialPage],
         queryFn: () => fetchNotes(initialQuery, initialPage)
     })
+
+    const notes = await fetchNotes(initialQuery, initialPage);
+
+    const initialNotes = {
+      ...notes, 
+      query: initialQuery,
+      page: initialPage,
+    };
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient initialQuery={initialQuery} initialPage={initialPage} />
+      <NotesClient initialNotes={initialNotes} />
     </HydrationBoundary>
   )
 }
