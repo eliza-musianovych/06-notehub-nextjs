@@ -3,7 +3,7 @@ import { fetchNotes } from '@/lib/api'
 import NotesClient from './Notes.client';
 
 type PageProps = {
-    searchParams: { initialQuery?: string, initialPage?: number};
+    searchParams: { initialQuery?: string, initialPage?: string};
 }
 
 export default async function Notes({ searchParams}: PageProps) {
