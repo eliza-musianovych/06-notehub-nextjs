@@ -1,15 +1,10 @@
 import axios from "axios";
 import type { Note } from "@/types/note";
+import type { NewNote } from "@/types/note";
 
 interface NotesHttpResponse {
     notes: Note[];
     totalPages: number;
-}
-
-interface NewNote {
-    title: string;
-    content: string;
-    tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 }
 
 const URL = 'https://notehub-public.goit.study/api/notes';

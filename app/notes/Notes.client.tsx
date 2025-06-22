@@ -10,10 +10,15 @@ import { useDebounce } from 'use-debounce';
 import { fetchNotes } from '@/lib/api';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-export default function NotesClient() {
-    const [query, setQuery] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
-  const [isCreateNote, setIsCreateNote] =useState<boolean>(false);
+type NotesClientProps = {
+  initialQuery: string;
+  initialPage: number;
+};
+
+export default function NotesClient({ initialQuery, initialPage }: NotesClientProps) {
+  const [query, setQuery] = useState(initialQuery);
+  const [page, setPage] = useState(initialPage);
+  const [isCreateNote, setIsCreateNote] = useState<boolean>(false);
 
   const updateQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);
