@@ -9,10 +9,10 @@ interface NotesHttpResponse {
 
 const URL = 'https://notehub-public.goit.study/api/notes';
 
-export const fetchNotes = async(query: string, page: number): Promise<NotesHttpResponse> => { 
+export const fetchNotes = async(query?: string, page: number = 1): Promise<NotesHttpResponse> => { 
     const parameters = new URLSearchParams({
         ...(query !=='' ? {search: query}:{}),
-        page: page.toString(),
+        page: page.toString() ,
     })
     const response = await axios.get<NotesHttpResponse>(
         `${URL}?${parameters}`, {

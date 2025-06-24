@@ -14,8 +14,6 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 interface NoteData {
   notes: Note[],
   totalPages: number,
-  query?: string,
-  page: number
 }
 
 type NotesClientProps = {
@@ -23,8 +21,8 @@ type NotesClientProps = {
 };
 
 export default function NotesClient({ initialNotes }: NotesClientProps) {
-  const [query, setQuery] = useState(initialNotes.query ?? '');
-  const [page, setPage] = useState(initialNotes.page ?? 1);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
   const [isCreateNote, setIsCreateNote] = useState<boolean>(false);
 
   const updateQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,14 +36,7 @@ export default function NotesClient({ initialNotes }: NotesClientProps) {
     queryKey: ['notes', debouncedQuery, page],
     queryFn: () => fetchNotes(debouncedQuery, page),
     placeholderData: keepPreviousData,
-    initialData: () => {
-      if (
-      debouncedQuery === (initialNotes.query ?? '') &&
-      page === (initialNotes.page ?? 1)
-      ) {
-        return initialNotes;
-      } return undefined;
-    },
+    initialData: initialNotes,
   });
 
   const handleClick = () => setIsCreateNote(true);
